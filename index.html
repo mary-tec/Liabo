@@ -8,23 +8,29 @@
             background-color: #111827;
             color: white;
             text-align: center;
-            padding: 50px;
+            padding: 30px;
         }
         textarea {
-            width: 80%;
-            height: 200px;
+            width: 90%;
+            height: 100px;
             padding: 10px;
             font-size: 16px;
             border-radius: 8px;
             border: none;
         }
         button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
+            margin-top: 10px;
+            padding: 8px 16px;
             border-radius: 8px;
             border: none;
             cursor: pointer;
+        }
+        .note {
+            background: #1f2937;
+            margin: 15px auto;
+            padding: 10px;
+            width: 90%;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -33,9 +39,51 @@
     <h1>Liabo 📝</h1>
     <p>Your focused notebook space.</p>
 
-    <textarea placeholder="Start writing your thoughts..."></textarea>
+    <textarea id="noteInput" placeholder="Write a new note..."></textarea>
     <br>
-    <button>Save Note</button>
+    <button onclick="addNote()">Add Note</button>
+
+    <div id="notesContainer"></div>
+
+    <script>
+        let notes = JSON.parse(localStorage.getItem("liaboNotes")) || [];
+
+        function saveNotes() {
+            localStorage.setItem("liaboNotes", JSON.stringify(notes));
+        }
+
+        function addNote() {
+            const noteText = document.getElementById("noteInput").value;
+            if (noteText.trim() === "") return;
+
+            notes.push(noteText);
+            saveNotes();
+            document.getElementById("noteInput").value = "";
+            displayNotes();
+        }
+
+        function deleteNote(index) {
+            notes.splice(index, 1);
+            saveNotes();
+            displayNotes();
+        }
+
+        function displayNotes() {
+            const container = document.getElementById("notesContainer");
+            container.innerHTML = "";
+
+            notes.forEach((note, index) => {
+                container.innerHTML += `
+                    <div class="note">
+                        <p>${note}</p>
+                        <button onclick="deleteNote(${index})">Delete</button>
+                    </div>
+                `;
+            });
+        }
+
+        displayNotes();
+    </script>
 
 </body>
 </html>

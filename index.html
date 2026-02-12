@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,13 +11,13 @@
             transition: 0.3s;
         }
 
-        textarea {
+        input, textarea {
             width: 90%;
-            height: 100px;
             padding: 10px;
             font-size: 16px;
             border-radius: 8px;
             border: none;
+            margin-bottom: 10px;
         }
 
         button, select {
@@ -32,6 +33,12 @@
             padding: 10px;
             width: 90%;
             border-radius: 10px;
+            text-align: left;
+        }
+
+        .note-title {
+            font-weight: bold;
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -50,6 +57,7 @@
 
     <br><br>
 
+    <input id="noteTitle" placeholder="Note title">
     <textarea id="noteInput" placeholder="Write a new note..."></textarea>
     <br>
     <button onclick="addNote()">Add Note</button>
@@ -65,11 +73,13 @@
         }
 
         function addNote() {
-            const noteText = document.getElementById("noteInput").value;
-            if (noteText.trim() === "") return;
+            const title = document.getElementById("noteTitle").value.trim();
+            const content = document.getElementById("noteInput").value.trim();
+            if (!content) return;
 
-            notes.push(noteText);
+            notes.push({ title: title || "Untitled", content });
             saveNotes();
+            document.getElementById("noteTitle").value = "";
             document.getElementById("noteInput").value = "";
             displayNotes();
         }
@@ -87,7 +97,8 @@
             notes.forEach((note, index) => {
                 container.innerHTML += `
                     <div class="note">
-                        <p>${note}</p>
+                        <div class="note-title">${note.title}</div>
+                        <p>${note.content}</p>
                         <button onclick="deleteNote(${index})">Delete</button>
                     </div>
                 `;
@@ -102,7 +113,7 @@
 
         function applyTheme() {
             const body = document.body;
-            const notes = document.querySelectorAll(".note");
+            const notesElements = document.querySelectorAll(".note");
 
             if (theme === "dark") {
                 body.style.background = "#111827";
@@ -113,15 +124,4 @@
             } else if (theme === "soft") {
                 body.style.background = "#fce7f3";
                 body.style.color = "#4b5563";
-            } else if (theme === "tech") {
-                body.style.background = "#000000";
-                body.style.color = "#00ffcc";
-            }
-        }
-
-        displayNotes();
-        applyTheme();
-    </script>
-
-</body>
-</html>
+            } else if (

@@ -5,11 +5,11 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #111827;
-            color: white;
             text-align: center;
             padding: 30px;
+            transition: 0.3s;
         }
+
         textarea {
             width: 90%;
             height: 100px;
@@ -18,15 +18,16 @@
             border-radius: 8px;
             border: none;
         }
-        button {
+
+        button, select {
             margin-top: 10px;
             padding: 8px 16px;
             border-radius: 8px;
             border: none;
             cursor: pointer;
         }
+
         .note {
-            background: #1f2937;
             margin: 15px auto;
             padding: 10px;
             width: 90%;
@@ -39,6 +40,16 @@
     <h1>Liabo 📝</h1>
     <p>Your focused notebook space.</p>
 
+    <label>Choose Theme:</label>
+    <select onchange="changeTheme(this.value)">
+        <option value="dark">Dark</option>
+        <option value="light">Light</option>
+        <option value="soft">Soft</option>
+        <option value="tech">Tech</option>
+    </select>
+
+    <br><br>
+
     <textarea id="noteInput" placeholder="Write a new note..."></textarea>
     <br>
     <button onclick="addNote()">Add Note</button>
@@ -47,6 +58,7 @@
 
     <script>
         let notes = JSON.parse(localStorage.getItem("liaboNotes")) || [];
+        let theme = localStorage.getItem("liaboTheme") || "dark";
 
         function saveNotes() {
             localStorage.setItem("liaboNotes", JSON.stringify(notes));
@@ -82,7 +94,33 @@
             });
         }
 
+        function changeTheme(selectedTheme) {
+            theme = selectedTheme;
+            localStorage.setItem("liaboTheme", theme);
+            applyTheme();
+        }
+
+        function applyTheme() {
+            const body = document.body;
+            const notes = document.querySelectorAll(".note");
+
+            if (theme === "dark") {
+                body.style.background = "#111827";
+                body.style.color = "white";
+            } else if (theme === "light") {
+                body.style.background = "#f3f4f6";
+                body.style.color = "black";
+            } else if (theme === "soft") {
+                body.style.background = "#fce7f3";
+                body.style.color = "#4b5563";
+            } else if (theme === "tech") {
+                body.style.background = "#000000";
+                body.style.color = "#00ffcc";
+            }
+        }
+
         displayNotes();
+        applyTheme();
     </script>
 
 </body>

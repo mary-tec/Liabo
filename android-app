@@ -1,0 +1,12 @@
+android-app/
+ └── app/
+      └── src/
+           └── main/
+                ├── java/com/mary/liabo/
+                │     └── MainActivity.kt
+                ├── res/
+                │     ├── layout/
+                │     │    └── activity_main.xml
+                │     └── values/
+                │          └── strings.xml
+                └── AndroidManifest.xml

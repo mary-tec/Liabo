@@ -1,137 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Liabo</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 30px;
-            transition: 0.3s;
-        }
-
-        input, textarea {
-            width: 90%;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 8px;
-            border: none;
-            margin-bottom: 10px;
-        }
-
-        button, select {
-            margin-top: 10px;
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .note {
-            margin: 15px auto;
-            padding: 10px;
-            width: 90%;
-            border-radius: 10px;
-            text-align: left;
-        }
-
-        .note-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liabo v0.5</title>
+<style>
+  body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    transition: background 0.3s, color 0.3s;
+  }
+  header {
+    padding: 1rem;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  .theme-toggle {
+    margin: 0.5rem;
+    text-align: center;
+  }
+  .notes {
+    max-width: 500px;
+    margin: 1rem auto;
+  }
+  .note {
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    background: #f2f2f2;
+  }
+  .add-note {
+    display: block;
+    width: 50px;
+    height: 50px;
+    background: #4caf50;
+    color: white;
+    font-size: 2rem;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 50px;
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    cursor: pointer;
+  }
+  /* Themes */
+  body.light { background: #fff; color: #000; }
+  body.dark { background: #1e1e1e; color: #eee; }
+  body.soft { background: #fff8f0; color: #333; }
+</style>
 </head>
-<body>
+<body class="light">
 
-    <h1>Liabo 📝</h1>
-    <p>Your focused notebook space.</p>
+<header>Liabo v0.5</header>
 
-    <label>Choose Theme:</label>
-    <select onchange="changeTheme(this.value)">
-        <option value="dark">Dark</option>
-        <option value="light">Light</option>
-        <option value="soft">Soft</option>
-        <option value="tech">Tech</option>
+<div class="theme-toggle">
+  <label>
+    Theme: 
+    <select id="themeSelect">
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+      <option value="soft">Soft Tech</option>
     </select>
+  </label>
+</div>
 
-    <br><br>
+<div class="notes" id="notes">
+  <!-- Optional sample notes -->
+  <div class="note" id="sampleNotes">
+    Sample Note 1: Welcome to Liabo!
+  </div>
+  <div class="note" id="sampleNotes2">
+    Sample Note 2: Click + to add your own notes.
+  </div>
+</div>
 
-    <input id="noteTitle" placeholder="Note title">
-    <textarea id="noteInput" placeholder="Write a new note..."></textarea>
-    <br>
-    <button onclick="addNote()">Add Note</button>
+<div class="add-note" onclick="addNote()">+</div>
 
-    <div id="notesContainer"></div>
+<script>
+const themeSelect = document.getElementById('themeSelect');
+themeSelect.addEventListener('change', e => {
+  document.body.className = e.target.value;
+});
 
-    <script>
-        let notes = JSON.parse(localStorage.getItem("liaboNotes")) || [];
-        let theme = localStorage.getItem("liaboTheme") || "dark";
+// Optional: allow user to hide sample notes
+function toggleSampleNotes(show=true) {
+  document.getElementById('sampleNotes').style.display = show ? 'block' : 'none';
+  document.getElementById('sampleNotes2').style.display = show ? 'block' : 'none';
+}
 
-        function saveNotes() {
-            localStorage.setItem("liaboNotes", JSON.stringify(notes));
-        }
+// Add Note placeholder
+function addNote() {
+  alert('Add Note feature coming soon!');
+}
 
-        function addNote() {
-            const title = document.getElementById("noteTitle").value.trim();
-            const content = document.getElementById("noteInput").value.trim();
-            if (!content) return;
-
-            notes.push({ title: title || "Untitled", content });
-            saveNotes();
-            document.getElementById("noteTitle").value = "";
-            document.getElementById("noteInput").value = "";
-            displayNotes();
-        }
-
-        function deleteNote(index) {
-            notes.splice(index, 1);
-            saveNotes();
-            displayNotes();
-        }
-
-        function displayNotes() {
-            const container = document.getElementById("notesContainer");
-            container.innerHTML = "";
-
-            notes.forEach((note, index) => {
-                container.innerHTML += `
-                    <div class="note">
-                        <div class="note-title">${note.title}</div>
-                        <p>${note.content}</p>
-                        <button onclick="deleteNote(${index})">Delete</button>
-                    </div>
-                `;
-            });
-        }
-
-        function changeTheme(selectedTheme) {
-            theme = selectedTheme;
-            localStorage.setItem("liaboTheme", theme);
-            applyTheme();
-        }
-
-        function applyTheme() {
-            const body = document.body;
-
-            if (theme === "dark") {
-                body.style.background = "#111827";
-                body.style.color = "white";
-            } else if (theme === "light") {
-                body.style.background = "#f3f4f6";
-                body.style.color = "black";
-            } else if (theme === "soft") {
-                body.style.background = "#fce7f3";
-                body.style.color = "#4b5563";
-            } else if (theme === "tech") {
-                body.style.background = "#000000";
-                body.style.color = "#00ffcc";
-            }
-        }
-
-        // Initialize app
-        displayNotes();
-        applyTheme();
-    </script>
+// Example: Hide sample notes if user wants
+toggleSampleNotes(true);
+</script>
 
 </body>
 </html>

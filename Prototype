@@ -1,0 +1,16 @@
+Liabo/
+ ├── README.md                 ← updated with v0.5 info
+ ├── docs/                     ← extra docs if needed
+ ├── prototype/                ← HTML/CSS prototype (GitHub Pages)
+ │    └── index.html           ← the upgraded optional features prototype
+ └── android-app/              ← Android starter skeleton
+      ├── app/
+      │    ├── src/
+      │    │    ├── main/
+      │    │    │    ├── java/com/mary/liabo/  ← placeholder
+      │    │    │    └── res/
+      │    │    │         ├── layout/
+      │    │    │         └── values/
+      │    │    └── AndroidManifest.xml
+      │    └── build.gradle
+      └── build.gradle
